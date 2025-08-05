@@ -20,4 +20,48 @@ public class Curso {
         this.lecciones = new ArrayList<>();
         this.suscriptos = new ArrayList<>();
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void agregarLeccion(Leccion leccion){
+        lecciones.add(leccion);
+    }
+
+    public boolean estaSuscripto(String usuarioId) {
+        boolean encontrado = false;
+        int i = 0;
+        while (i < suscriptos.size() && !encontrado) {
+            if (suscriptos.get(i).getId().equals(usuarioId)) {
+                encontrado = true;
+            }
+            i++;
+        }
+        return encontrado;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public int getValoracion() {
+        return valoracion;
+    }
+
+    public Usuario getAutor() {
+        return autor;
+    }
+
+    public List<Leccion> getLecciones() {
+        return lecciones;
+    }
+
+    public List<Usuario> getSuscriptos() {
+        return suscriptos;
+    }
 }
