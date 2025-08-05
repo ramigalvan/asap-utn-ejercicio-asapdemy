@@ -13,5 +13,20 @@ public class Categoria {
         this.nombre = nombre;
         this.cursos = new ArrayList<>();
     }
+    public boolean tieneCurso(String cursoId) {
+        boolean encontrado = false;
+        int i = 0;
+        while (i < cursos.size() && !encontrado) {
+            if (cursos.get(i).getId().equals(cursoId)) {
+                encontrado = true;
+            }
+            i++;
+        }
+        return encontrado;
+    }
+    public void agregarCurso(Curso curso){
+        cursos.add(curso);
+    }
+
 
 }
