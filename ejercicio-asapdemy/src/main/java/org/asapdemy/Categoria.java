@@ -29,4 +29,13 @@ public class Categoria {
     }
 
 
+    public Curso buscarCursoPorId(String cursoId) {
+        Curso cursoBuscado = null;
+        for(Curso curso : cursos){
+            if(curso.getId() == cursoId){
+                cursoBuscado = curso;
+            }
+        }
+        return cursoBuscado;
+    }
 }
