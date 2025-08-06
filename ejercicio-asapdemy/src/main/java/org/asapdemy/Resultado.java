@@ -1,10 +1,20 @@
 package org.asapdemy;
 
 public enum Resultado {
-    CURSO_INEX,
-    USUARIO_INEX,
-    YA_SUSCRIPTO,
-    ES_AUTOR,
-    MAX_BECADOS,
-    SUSCRIPTO_OK
+    CURSO_INEX("El curso no existe"),
+    USUARIO_INEX("El usuario no existe)"),
+    YA_SUSCRIPTO("El usuario ya esta suscripto al curso"),
+    ES_AUTOR("El autor del curso no puede suscribirse"),
+    MAX_BECADOS("Ya hay becados en el curso"),
+    SUSCRIPTO_OK("Usuario suscripto correctamente al curso");
+
+    private final String mensaje;
+
+    Resultado(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
 }
