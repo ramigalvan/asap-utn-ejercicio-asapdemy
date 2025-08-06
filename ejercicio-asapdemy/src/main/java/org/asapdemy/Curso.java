@@ -64,4 +64,19 @@ public class Curso {
     public List<Usuario> getSuscriptos() {
         return suscriptos;
     }
+    //TODO: verificar que se repete el limite de MAX_BECADOS = 5
+    public void agregarUsuario(Usuario usuario) {
+        //realizar un control
+        suscriptos.add(usuario);
+    }
+
+    public int cantidadActualBecados() {
+        int contadorBecados = 0;
+        for(Usuario usuario: suscriptos){
+            if(usuario.isEsBecado()){
+                contadorBecados++;
+            }
+        }
+        return contadorBecados;
+    }
 }
