@@ -3,13 +3,11 @@ package org.asapdemy;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: controlar que los usuarios no esten repetidos, mediante un campo unico, por ejemplo email
-//TODO: controlar que las categorias no esten repetidas
-
 public class Sitio {
     private String nombre;
     private List<Usuario> usuarios;
     private List<Categoria> categorias;
+
     public Sitio(String nombre) {
         this.nombre = nombre;
         this.usuarios = new ArrayList<>();
@@ -17,35 +15,45 @@ public class Sitio {
     }
 
     public Resultado suscribirseACurso(String usuarioId, String cursoId) {
-        //boolean cursoExistente = existeCurso(cursoId);
-        //boolean usuarioExistente = existeUsuario(usuarioId);
-        //TODO: hacer la logica de registrar al usuario al curso
-        //TODO: controlar si el usuario es autor
-        Usuario usuario = obtenerUsuario(usuarioId);
+        Resultado resultado;
 
-        if(!existeCurso(cursoId)){
-            return Resultado.CURSO_INEX;
-        }
-        if (!existeUsuario(usuarioId)) {
-            return Resultado.USUARIO_INEX;
-        }
-        //TODO TRUE, TODO OK
-        //el curso existe, trae el curso y verifica si esta inscripto
-        //recorres categorias, vas por los cursos, encuentras el curso y verificas el usuario
+        if (!existeCurso(cursoId)) {
+            resultado = Resultado.CURSO_INEX;
+        } else if (!existeUsuario(usuarioId)) {
+            resultado = Resultado.USUARIO_INEX;
+        } else {
+            //el usuario y curso existen, entonces los obtenemos y validamos lo demas
+            Usuario usuario = obtenerUsuario(usuarioId);
+            Curso curso = obtenerCurso(cursoId);
+            //el curso existe, trae el curso y verifica si esta inscripto
+            //recorres categorias, vas por los cursos, encuentras el curso y verificas el usuario
 
-        Curso curso = obtenerCurso(cursoId);
-        if (curso.estaSuscripto(usuarioId)) {
-            return Resultado.YA_SUSCRIPTO;
+            if (curso.estaSuscripto(usuarioId)) {
+                resultado = Resultado.YA_SUSCRIPTO;
+            } else if (esAutorDelCurso(usuario, curso)) {
+                resultado = Resultado.ES_AUTOR;
+            } else if (excedeLimiteDeBecados(usuario, curso)) {
+                resultado = Resultado.MAX_BECADOS;
+            } else {
+                curso.agregarUsuario(usuario);
+                resultado = Resultado.SUSCRIPTO_OK;
+            }
         }
 
-        if (curso.getAutor().getId().equals(usuarioId)) {
-            return Resultado.ES_AUTOR;
+        return resultado;
+    }
+
+    public boolean existeCurso(String cursoId) {
+        boolean existeCurso = false;
+
+        int i = 0;
+        while (i < categorias.size() && !existeCurso) {
+            if (categorias.get(i).tieneCurso(cursoId)) {
+                existeCurso = true;
+            }
+            i++;
         }
-        if(usuario.isEsBecado() && curso.cantidadActualBecados() >= 5){
-            return Resultado.MAX_BECADOS;
-        }
-        curso.agregarUsuario(usuario);
-        return Resultado.SUSCRIPTO_OK;
+        return existeCurso;
     }
 
     public boolean existeUsuario(String usuarioId) {
@@ -58,43 +66,6 @@ public class Sitio {
             i++;
         }
         return existeUsuario;
-    }
-
-    public Curso obtenerCurso(String cursoId) {
-        Curso cursoEncontrado = null;
-        //categorias tienen cursos
-        //cada categoria tiene muchos cursos
-
-        int i = 0;
-        while (i < categorias.size() && cursoEncontrado == null) {
-        Categoria categoria = categorias.get(i);
-        cursoEncontrado = categoria.buscarCursoPorId(cursoId) ;//metodo nuevo
-            i++;
-        }
-        return cursoEncontrado;
-    }
-
-    public boolean existeCurso(String cursoId) {
-        boolean existeCurso = false;
-        //categorias tienen cursos
-        //cada categoria tiene muchos cursos
-
-        int i = 0;
-        while (i < categorias.size() && !existeCurso) {
-            if (categorias.get(i).tieneCurso(cursoId)) {
-                existeCurso = true;
-            }
-            i++;
-        }
-        return existeCurso;
-    }
-
-    public void agregarCategoria(Categoria categoria) {
-        categorias.add(categoria);
-    }
-
-    public void agregarUsuario(Usuario usuario) {
-        usuarios.add(usuario);
     }
 
     private Usuario obtenerUsuario(String usuarioId) {
@@ -110,10 +81,62 @@ public class Sitio {
         return usuarioEncontrado;
     }
 
+    public Curso obtenerCurso(String cursoId) {
+        Curso cursoEncontrado = null;
 
+        int i = 0;
+        while (i < categorias.size() && cursoEncontrado == null) {
+        Categoria categoria = categorias.get(i);
+        cursoEncontrado = categoria.buscarCursoPorId(cursoId) ;//metodo nuevo
+            i++;
+        }
+        return cursoEncontrado;
+    }
 
+    private boolean esAutorDelCurso(Usuario usuario, Curso curso) {
+        return curso.getAutor().getId().equals(usuario.getId());
+    }
 
-    //agregar usuarios? agregarUsuario()¿
-    //agregar cursos? agregarCurso()
+    private boolean excedeLimiteDeBecados(Usuario usuario, Curso curso) {
+        return usuario.isEsBecado() && curso.cantidadActualBecados() >= 5;
+    }
+
+    public void agregarCategoria(Categoria categoria) {
+        boolean categoriaExistente = existeCategoria(categoria.getId());
+        if(!categoriaExistente){
+            categorias.add(categoria);
+        }else{
+            System.out.println("El categoria: " + categoria.toString() + ", ya existe.");
+        }
+
+    }
+
+    private boolean existeCategoria(String categoriaId) {
+        boolean existeCategoria = false;
+
+        int i = 0;
+        while (i < categorias.size() && !existeCategoria) {
+            if (categorias.get(i).getId().equals(categoriaId)) {
+                existeCategoria = true;
+            }
+            i++;
+        }
+        return existeCategoria;
+    }
+
+    public void agregarUsuario(Usuario usuario) {
+        boolean usuarioExistente = existeUsuario(usuario.getId());
+        if(!usuarioExistente) {
+            usuarios.add(usuario);
+        }else{
+            System.out.println("El usuario: " + usuario.toString() + ", ya existe.");
+        }
+
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
 
 }
