@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Curso {
+
     private  String id;
     private String titulo;
     private double precio;
@@ -41,32 +42,11 @@ public class Curso {
         return encontrado;
     }
 
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public int getValoracion() {
-        return valoracion;
-    }
-
     public Usuario getAutor() {
         return autor;
     }
 
-    public List<Leccion> getLecciones() {
-        return lecciones;
-    }
-
-    public List<Usuario> getSuscriptos() {
-        return suscriptos;
-    }
-    //TODO: verificar que se repete el limite de MAX_BECADOS = 5
     public void agregarUsuario(Usuario usuario) {
-        //realizar un control
         suscriptos.add(usuario);
     }
 
