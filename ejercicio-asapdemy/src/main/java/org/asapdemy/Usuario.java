@@ -17,15 +17,17 @@ public class Usuario {
         return id;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public boolean isEsBecado() {
         return esBecado;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                ", esBecado=" + esBecado +
+                '}';
     }
 }
