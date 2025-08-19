@@ -1,3 +1,10 @@
+## Participantes
+
+- [@Manuela Suarez](https://github.com/ManuelaSuarez)
+- [@Ignacio Igartua](https://github.com/NachoIgartua2)
+- [@Ramiro Galvan](https://github.com/ramigalvan)
+
+
 ![Diagrama UML](screens/captura-uml.jpg)
 # Ejercicio ASAPDemy
 
